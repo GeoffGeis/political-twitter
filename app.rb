@@ -1,39 +1,21 @@
-require 'twitter'
+require './storm'
+require 'ssl_certifier'
 
-Twitter.configure do |config|
-  config.consumer_key = "insert key from twitter"
-  config.consumer_secret = "intert key from twitter"
-  config.oauth_token = "insert key from twitter"
-  config.oauth_token_secret = "insert key from twitter"
-end
-
-tweets = []
-filename = "tweets"
-file = File.new(filename, 'r')
-file.each_line("\n") do |row|
-  tweets.push row.chomp
-end
-
-def tweetthis(message)
-  Twitter.update(message)
-end
-
-tweet = ""
-
-loop do
-  tweet = tweets.sample
-  while tweet.length > 140
-    tweet = tweets.sample
-  end  
-  begin
-    tweetthis tweet
-    puts "Tweeting: #{tweet}"
-    sleep(Random.rand(220...360))
-  rescue
-    puts "Tweet failed"
-    sleep(Random.rand(10..20))
+def parse_file(f)
+  tweets = []
+  file = File.new(f, 'r')
+  file.each_line("\n") do |row|
+    tweets << row.chomp if row.chomp.length < 140
   end
+  tweets
 end
 
-#hai hai hai
-#nother comment
+tweets = parse_file './tweets'
+config = {}
+config[:consumer_key] = "23vyq5tfgN9Mr2ZgmWWaQ"
+config[:consumer_secret] = "8dUwJsl6bDS3Dn38gwKMatffXwZ4vh2SvDGPp1M"
+config[:oauth_token] = "1475732792-5d4Q4LxcxgZZ2U27Db7maBA0lRmS2hg5HYXmhfm"
+config[:oauth_token_secret] = "WE3hIyEhIIjPPb6yglaT512XPtiS9b01mHsSjsNdi0"
+
+client = Storm.new(config)
+client.tweet_all tweets
