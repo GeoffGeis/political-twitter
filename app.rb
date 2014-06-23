@@ -3,7 +3,8 @@ require 'ssl_certifier'
 
 class App
   def initialize(target)
-    @tweets = parse_file(target, './tweets')
+    file = File.new('./tweets', 'r')
+    @tweets = parse_file(target, file)
     config = {}
     config[:consumer_key] = ""
     config[:consumer_secret] = ""
@@ -13,9 +14,8 @@ class App
     attack!
   end
 
-  def parse_file(target, f)
+  def parse_file(target, file)
     tweets = []
-    file = File.new(f, 'r')
     file.each_line("\n") do |row|
       tweets << target + ' ' + row.chomp if row.chomp.length < 140
     end
