@@ -9,6 +9,7 @@ class Storm
       config.access_token = cfg[:access_token]
       config.access_token_secret = cfg[:access_token_secret]
     end
+    @random = Random.new
   end
 
   def tweet_this(message)
@@ -20,11 +21,11 @@ class Storm
       begin 
         tweet_this tweet
         puts "Tweeting: #{tweet}"
-        sleep(Random.rand(220...360))
+        sleep(@random.rand(220...360))
       rescue Exception => e
         puts "Tweet failed"
         puts e.message
-        sleep(Random.rand(10..20))
+        sleep(@random.rand(10..20))
       end
     end
   end
