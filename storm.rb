@@ -19,7 +19,7 @@ class Storm
   def tweet_all(tweets)
   	tweets.each do |tweet|
       begin 
-        tweet_this tweet
+        tweet_this(tweet)
         puts "Tweeting: #{tweet}"
         sleep(@random.rand(220...360))
       rescue Exception => e
